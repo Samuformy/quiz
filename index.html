@@ -1,0 +1,51 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interattivo</title>
+    <script>
+        // Example quiz logic fetching random questions
+        let questions = []; // Placeholder for quiz questions fetched from the API
+
+        async function loadQuiz() {
+            const response = await fetch("/api/quiz");
+            questions = await response.json();
+            renderQuiz();
+        }
+
+        function renderQuiz() {
+            const quizContainer = document.getElementById("quiz-container");
+            quizContainer.innerHTML = "";
+            questions.forEach((q, index) => {
+                const questionDiv = document.createElement("div");
+                questionDiv.className = "question";
+                questionDiv.innerHTML = `<p><strong>${index + 1}. ${q.question}</strong></p>`;
+
+                q.options.forEach((option, optIndex) => {
+                    const optionElem = document.createElement("div");
+                    optionElem.innerHTML = `
+                        <input type="radio" id="q${index}_o${optIndex}" name="q${index}" value="${optIndex}">
+                        <label for="q${index}_o${optIndex}">${option}</label>
+                    `;
+                    questionDiv.appendChild(optionElem);
+                });
+
+                quizContainer.appendChild(questionDiv);
+            });
+        }
+
+        function submitQuiz() {
+            alert("Grazie per aver completato il quiz!");
+        }
+
+        window.onload = loadQuiz;
+    </script>
+</head>
+<body>
+    <h1>Quiz Interattivo</h1>
+    <div id="quiz-container"></div>
+    <button onclick="submitQuiz()">Invia Risposte</button>
+</body>
+</html>
